@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace MyBankApp.Domain.Entities
 {
-    public class State
+    public class Gender
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-
-        // Navigation property for related LGAs
-        public ICollection<LGA> LGAs { get; set; } = new List<LGA>();
+        public string Description { get; set; }
     }
 }

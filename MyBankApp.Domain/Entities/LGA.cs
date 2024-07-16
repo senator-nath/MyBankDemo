@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace MyBankApp.Domain.Entities
 {
-    internal class LGA
+    public class LGA
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        // Foreign key for State
         public int StateId { get; set; }
+
+        // Navigation property for related State
+        public State State { get; set; }
     }
 }
