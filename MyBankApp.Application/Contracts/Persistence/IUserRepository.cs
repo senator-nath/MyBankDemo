@@ -9,6 +9,6 @@ namespace MyBankApp.Application.Contracts.Persistence
 {
     public interface IUserRepository : IAsyncRepository<User>
     {
-        Task<bool> isUniqueUser(string username, string Email);
+        Task<bool> isUniqueUser(User entity);
     }
 }

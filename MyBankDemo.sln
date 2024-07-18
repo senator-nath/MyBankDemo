@@ -18,6 +18,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBankApp.Application", "MyBankApp.Application\MyBankApp.Application.csproj", "{93BD757A-A9EB-416F-A5E2-B03DD7CBBD00}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBankApp.Persistence", "MyBankApp.Persistence\MyBankApp.Persistence.csproj", "{34DE87FC-6CBD-4036-9FF9-392B8DB4DBC7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B16E1260-69C8-4111-887B-7A260737DA4B} = {B16E1260-69C8-4111-887B-7A260737DA4B}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBankDemo.API", "MyBankDemo.API\MyBankDemo.API.csproj", "{B1BA8063-7F78-4C63-98C5-B93C3C2644E4}"
 EndProject

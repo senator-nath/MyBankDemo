@@ -21,26 +21,30 @@ namespace MyBankApp.Persistence.Repository
         {
             return await _dbContext.Set<User>().ToListAsync();
         }
-        public override async Task UpdateAsync(User entity)
+        public override async Task<bool> UpdateAsync(User entity)
         {
             var existingUser = await _dbContext.Set<User>().Where(a => a.Id == entity.Id).FirstOrDefaultAsync();
             if (existingUser != null)
             {
                 _dbContext.Set<User>().Update(existingUser);
             }
+            return true;
         }
-        public override async Task DeleteAsync(User entity)
+        public override async Task<bool> DeleteAsync(User entity)
         {
             var existingUser = await _dbContext.Set<User>().Where(a => a.Id == entity.Id).FirstOrDefaultAsync();
             if (existingUser != null)
             {
                 _dbContext.Set<User>().Remove(existingUser);
             }
+            return true;
         }
 
-        public Task<bool> isUniqueUser(string username, string Email)
+        public async Task<bool> isUniqueUser(User entity)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.Set<User>().Where(x => x.UserName == entity.UserName && x.Email == entity.Email).SingleOrDefaultAsync();
+            if (user == null) { return true; }
+            return false;
         }
     }
 }

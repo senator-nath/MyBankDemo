@@ -8,7 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MyBankApp.Application.Configuration;
+using MyBankApp.Application.Contracts.IServices;
+using MyBankApp.Application.Contracts.Persistence;
 using MyBankApp.Persistence.Data;
+using MyBankApp.Persistence.Repository;
+using MyBankApp.Persistence.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +35,18 @@ namespace MyBankDemo.API
         {
             services.AddCors();
             services.AddDbContext<MyBankAppDbContext>(Options => Options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IGenderRepository, GenderRepository>();
+            services.AddScoped<IGenderService, GenderService>();
+            //services.AddScoped<>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyBankDemo.API", Version = "v1" });
             });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

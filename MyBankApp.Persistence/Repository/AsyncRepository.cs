@@ -16,19 +16,21 @@ namespace MyBankApp.Persistence.Repository
         public AsyncRepository(MyBankAppDbContext dbContext)
         {
             _dbContext = dbContext;
+            _dbSet = dbContext.Set<T>();
         }
-        public async Task CreateAsync(T entity)
+        public async Task<T> CreateAsync(T entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
+            var result = await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
 
-            //return entity;
+            return entity;
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual async Task<bool> DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
@@ -43,10 +45,11 @@ namespace MyBankApp.Persistence.Repository
 
 
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<bool> UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

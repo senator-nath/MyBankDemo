@@ -9,5 +9,6 @@ namespace MyBankApp.Application.Contracts.Persistence
 {
     public interface IGenderRepository : IAsyncRepository<Gender>
     {
+        
     }
 }
