@@ -18,11 +18,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Serilog;
+using Microsoft.Extensions.Logging;
+using Serilog.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
 namespace MyBankDemo.API
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,9 +42,27 @@ namespace MyBankDemo.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IGenderRepository, GenderRepository>();
             services.AddScoped<IGenderService, GenderService>();
+
+            services.AddScoped<ILGAService, LGAService>();
+            services.AddScoped<ILGARepository, LGARepository>();
+            services.AddScoped<IStateRepository, StateRepository>();
+            services.AddScoped<IStateService, StateService>();
             //services.AddScoped<>();
 
             services.AddControllers();
+
+            services.AddLogging(logging =>
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .MinimumLevel.Debug()
+                    .WriteTo.Console()
+                    .WriteTo.File("logs/mybankapp.txt", rollingInterval: RollingInterval.Day)
+                    .CreateLogger();
+
+                logging.AddSerilog();
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyBankDemo.API", Version = "v1" });
@@ -54,6 +76,7 @@ namespace MyBankDemo.API
         {
             if (env.IsDevelopment())
             {
+                //app.UseExceptionHandler();
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyBankDemo.API v1"));

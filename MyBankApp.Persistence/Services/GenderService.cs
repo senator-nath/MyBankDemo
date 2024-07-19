@@ -1,4 +1,5 @@
-﻿using MyBankApp.Application.Configuration;
+﻿using Microsoft.Extensions.Logging;
+using MyBankApp.Application.Configuration;
 using MyBankApp.Application.Contracts.IServices;
 using MyBankApp.Application.Contracts.Persistence;
 using MyBankApp.Domain.Dto.RequestDto;
@@ -14,28 +15,40 @@ namespace MyBankApp.Persistence.Services
     public class GenderService : IGenderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<GenderService> _logger;
 
-        public GenderService(IUnitOfWork unitOfWork)
+        public GenderService(IUnitOfWork unitOfWork, ILogger<GenderService> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
 
         public async Task<IEnumerable<GenderRequestDto>> GetAllPostsAsync()
         {
-            if (_unitOfWork != null)
+            try
             {
-                var genders = await _unitOfWork.gender.GetAllAsync();
-
-                return genders.Select(g => new GenderRequestDto
+                if (_unitOfWork != null)
                 {
-                    Id = g.Id,
-                    Description = g.Description
-                });
+                    var genders = await _unitOfWork.gender.GetAllAsync();
+
+                    return genders.Select(g => new GenderRequestDto
+                    {
+                        Id = g.Id,
+                        Description = g.Description
+                    });
+                }
+                else
+                {
+                    _logger.LogError("Unit of work is null");
+                    return Enumerable.Empty<GenderRequestDto>();
+                }
             }
-            return Enumerable.Empty<GenderRequestDto>();
-
-
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all genders");
+                return Enumerable.Empty<GenderRequestDto>();
+            }
         }
 
     }

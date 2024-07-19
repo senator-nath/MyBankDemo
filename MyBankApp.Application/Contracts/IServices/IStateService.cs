@@ -1,4 +1,5 @@
 ﻿using MyBankApp.Domain.Dto.RequestDto;
+using MyBankApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace MyBankApp.Application.Contracts.IServices
 {
-    public interface IState
+    public interface IStateService
     {
-        Task<List<GenderRequestDto>> GetAllPostsAsync();
+        Task<IEnumerable<State>> GetAllStatesAsync();
     }
 }

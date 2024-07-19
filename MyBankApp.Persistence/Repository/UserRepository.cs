@@ -43,8 +43,8 @@ namespace MyBankApp.Persistence.Repository
         public async Task<bool> isUniqueUser(User entity)
         {
             var user = await _dbContext.Set<User>().Where(x => x.UserName == entity.UserName && x.Email == entity.Email).SingleOrDefaultAsync();
-            if (user == null) { return true; }
-            return false;
+            if (user == null) { return false; }
+            return true;
         }
     }
 }

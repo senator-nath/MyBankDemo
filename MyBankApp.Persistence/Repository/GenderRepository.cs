@@ -12,7 +12,7 @@ namespace MyBankApp.Persistence.Repository
 {
     public class GenderRepository : AsyncRepository<Gender>, IGenderRepository
     {
-        private readonly MyBankAppDbContext _dbContext;
+        //private readonly MyBankAppDbContext _dbContext;
         public GenderRepository(MyBankAppDbContext dbContext) : base(dbContext)
         {
 

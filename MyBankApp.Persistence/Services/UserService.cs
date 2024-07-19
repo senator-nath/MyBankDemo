@@ -18,22 +18,24 @@ namespace MyBankApp.Persistence.Services
             _unitOfWork = unitOfWork;
         }
 
-        //public async Task<bool> IsUniqueUser(User entity)
-        //{
-        //    var existingUser = await _unitOfWork.user.isUniqueUser(x => x.UserName == entity.UserName || x.Email == entity.Email);
-        //    return existingUser == null;
-        //}
+        public async Task<bool> IsUniqueUser(User entity)
+        {
+            var existingUser = await _unitOfWork.user.isUniqueUser(entity);
+            return existingUser;
 
-        //public async Task<User> Register(User entity)
-        //{
-        //    if (!await IsUniqueUser(entity))
-        //    {
-        //        throw new InvalidOperationException("User already exists");
-        //    }
+        }
 
-        //    _unitOfWork.user.CreateAsync(entity);
-        //    await _unitOfWork.CompleteAsync();
-        //    return entity;
-        //}
+        public async Task<User> Register(User entity)
+        {
+            var existingUser = await IsUniqueUser(entity);
+            if (!existingUser)
+            {
+                throw new InvalidOperationException("User already exists");
+            }
+
+            await _unitOfWork.user.CreateAsync(entity);
+            await _unitOfWork.CompleteAsync();
+            return entity;
+        }
     }
 }

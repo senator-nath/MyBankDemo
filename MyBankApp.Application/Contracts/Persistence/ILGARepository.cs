@@ -1,4 +1,5 @@
-﻿using MyBankApp.Domain.Entities;
+﻿using MyBankApp.Domain.Dto.ResponseDto;
+using MyBankApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace MyBankApp.Application.Contracts.Persistence
 {
     public interface ILGARepository : IAsyncRepository<LGA>
     {
+        Task<IEnumerable<LGAResponseDto>> GetByStateIdAsync(int stateId);
     }
 }

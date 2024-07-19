@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyBankApp.Application.Contracts.Persistence;
+using MyBankApp.Domain.Dto.ResponseDto;
 using MyBankApp.Domain.Entities;
 using MyBankApp.Persistence.Data;
 using System;
@@ -12,7 +13,7 @@ namespace MyBankApp.Persistence.Repository
 {
     public class StateRepository : AsyncRepository<State>, IStateRepository
     {
-        private readonly MyBankAppDbContext _dbContext;
+        //private readonly MyBankAppDbContext _dbContext;
         public StateRepository(MyBankAppDbContext dbContext) : base(dbContext)
         {
 

@@ -14,6 +14,6 @@ namespace MyBankApp.Domain.Dto.ResponseDto
 
         public int StateId { get; set; }
 
-        public State State { get; set; }
+        
     }
 }

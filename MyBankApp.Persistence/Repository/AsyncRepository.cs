@@ -11,7 +11,7 @@ namespace MyBankApp.Persistence.Repository
 {
     public class AsyncRepository<T> : IAsyncRepository<T> where T : class
     {
-        private readonly MyBankAppDbContext _dbContext;
+        protected readonly MyBankAppDbContext _dbContext;
         protected DbSet<T> _dbSet;
         public AsyncRepository(MyBankAppDbContext dbContext)
         {
