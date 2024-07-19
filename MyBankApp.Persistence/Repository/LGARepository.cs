@@ -13,7 +13,7 @@ namespace MyBankApp.Persistence.Repository
 {
     public class LGARepository : AsyncRepository<LGA>, ILGARepository
     {
-        private readonly MyBankAppDbContext _dbContext;
+        //private readonly MyBankAppDbContext _dbContext;
         public LGARepository(MyBankAppDbContext dbContext) : base(dbContext)
         {
 

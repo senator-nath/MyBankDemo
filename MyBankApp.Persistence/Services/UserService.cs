@@ -1,4 +1,5 @@
-﻿using MyBankApp.Application.Configuration;
+﻿using Microsoft.Extensions.Logging;
+using MyBankApp.Application.Configuration;
 using MyBankApp.Application.Contracts.IServices;
 using MyBankApp.Domain.Entities;
 using System;
@@ -9,33 +10,50 @@ using System.Threading.Tasks;
 
 namespace MyBankApp.Persistence.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<bool> IsUniqueUser(User entity)
         {
-            var existingUser = await _unitOfWork.user.isUniqueUser(entity);
-            return existingUser;
-
+            try
+            {
+                var existingUser = await _unitOfWork.user.isUniqueUser(entity);
+                return existingUser;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking if user is unique");
+                throw;
+            }
         }
 
         public async Task<User> Register(User entity)
         {
-            var existingUser = await IsUniqueUser(entity);
-            if (!existingUser)
+            try
             {
-                throw new InvalidOperationException("User already exists");
-            }
+                var existingUser = await IsUniqueUser(entity);
+                if (!existingUser)
+                {
+                    throw new InvalidOperationException("User already exists");
+                }
 
-            await _unitOfWork.user.CreateAsync(entity);
-            await _unitOfWork.CompleteAsync();
-            return entity;
+                await _unitOfWork.user.CreateAsync(entity);
+                await _unitOfWork.CompleteAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error registering user");
+                throw;
+            }
         }
     }
 }

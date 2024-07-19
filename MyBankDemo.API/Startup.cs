@@ -47,7 +47,8 @@ namespace MyBankDemo.API
             services.AddScoped<ILGARepository, LGARepository>();
             services.AddScoped<IStateRepository, StateRepository>();
             services.AddScoped<IStateService, StateService>();
-            //services.AddScoped<>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddControllers();
 

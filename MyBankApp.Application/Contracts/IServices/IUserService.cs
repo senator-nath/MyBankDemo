@@ -9,7 +9,7 @@ namespace MyBankApp.Application.Contracts.IServices
 {
     public interface IUserService
     {
-         Task<bool> IsUniqueUser(User entity);
+        Task<bool> IsUniqueUser(User entity);
 
         Task<User> Register(User entity);
     }

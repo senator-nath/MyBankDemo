@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyBankApp.Application.Configuration;
+using MyBankApp.Application.Contracts.IServices;
 using MyBankApp.Application.validator;
 using MyBankApp.Domain.Dto.RequestDto;
 using MyBankApp.Domain.Entities;
+using MyBankApp.Persistence.Services;
+using Serilog;
+using System;
 using System.Threading.Tasks;
 
 namespace MyBankDemo.API.Controllers
@@ -12,19 +16,30 @@ namespace MyBankDemo.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        //private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
 
-        //public UserController(IUnitOfWork unitOfWork)
-        //{
-        //    _unitOfWork = unitOfWork;
-        //}
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+        [HttpPost("register")]
+        public async Task<ActionResult<User>> RegisterUser([FromBody] User user)
+        {
+            try
+            {
+                var result = await _userService.Register(user);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
 
-        //[HttpPost]
-        //public async Task<UserRequestDto> CreateUser(UserRequestDto user)
-        //{
+        }
 
-        //}
-        //[HttpPut]
-        //public async Task<UserRequestDto> UpdateUser(UserRequestDto user)
     }
 }
