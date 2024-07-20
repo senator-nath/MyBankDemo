@@ -4,6 +4,7 @@ using MyBankApp.Application.Configuration;
 using MyBankApp.Application.Contracts.IServices;
 using MyBankApp.Application.Contracts.Persistence;
 using MyBankApp.Domain.Dto.RequestDto;
+using MyBankApp.Domain.Dto.ResponseDto;
 using MyBankApp.Persistence.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace MyBankDemo.API.Controllers
 
         }
         [HttpGet("Get-ALl-Genders")]
-        public async Task<ActionResult<IEnumerable<GenderRequestDto>>> GetAllGenders()
+        public async Task<ActionResult<IEnumerable<GenderResponseDto>>> GetAllGenders()
         {
             var genders = await _service.GetAllPostsAsync();
 

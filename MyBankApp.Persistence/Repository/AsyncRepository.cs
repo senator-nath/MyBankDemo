@@ -38,6 +38,11 @@ namespace MyBankApp.Persistence.Repository
             return await _dbContext.Set<T>().ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAllByColumnAsync(Func<T, bool> predicate)
+        {
+            return await Task.Run(() => _dbContext.Set<T>().Where(predicate).AsEnumerable());
+        }
+
         public async Task<T> GetAsync(int id)
         {
             return await _dbContext.Set<T>().FindAsync(id);

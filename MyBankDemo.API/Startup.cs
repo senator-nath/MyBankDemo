@@ -22,6 +22,13 @@ using Serilog;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
+using MyBankApp.Domain.Entities;
+using MyBankApp.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using MyBankApp.Application.validator;
 namespace MyBankDemo.API
 {
     public class Startup
@@ -49,6 +56,8 @@ namespace MyBankDemo.API
             services.AddScoped<IStateService, StateService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<UserRequestValidator>();
+
 
             services.AddControllers();
 
@@ -69,6 +78,55 @@ namespace MyBankDemo.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyBankDemo.API", Version = "v1" });
             });
 
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+
+            var key = Encoding.ASCII.GetBytes(appSettings.secret);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
+            //services.AddIdentity<User, IdentityRole>()
+            //    //.AddEntityFrameworkStores<MyBankAppContext>()
+            //    .AddDefaultTokenProviders();
+
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
+            //.AddJwtBearer(options =>
+            //{
+            //    options.SaveToken = true;
+            //    options.RequireHttpsMetadata = false;
+            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //    {
+            //        //ValidateIssuerSigningKey = true,
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = true,
+            //        ValidAudience = Configuration["JWT:ValidAudience"],
+            //        ValidIssuer = Configuration["JWT:ValidIssuer"],
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+            //    };
+            //});
 
         }
 
@@ -86,7 +144,8 @@ namespace MyBankDemo.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

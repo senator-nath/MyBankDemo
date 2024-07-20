@@ -40,8 +40,8 @@ namespace MyBankApp.Application.validator
                 .NotEmpty().WithMessage("Confirm password is required.")
                 .Equal(x => x.Password).WithMessage("Passwords must match.");
 
-            RuleFor(x => x.PhoneNumber)
-                .Matches(@"^\+?[1-9]\d{11}$").WithMessage("Invalid phone number format.");
+            //RuleFor(x => x.PhoneNumber)
+            //    .Matches(@"^\+?[1-9]\d{11}$").WithMessage("Invalid phone number format.");
 
             RuleFor(x => x.Age)
                 .GreaterThan(0).WithMessage("Age must be a positive integer.");
@@ -57,11 +57,13 @@ namespace MyBankApp.Application.validator
                 .GreaterThan(0).WithMessage("State ID must be a positive integer.");
 
             RuleFor(x => x.Bvn)
-                .Length(11).When(x => x.HasBvn).Matches(@"^\[0-9]\d{11}$").WithMessage("If BVN is provided, it must be 11 digits long.");
+                .Matches(@"^\d{11}$")
+                .WithMessage("BVN must be exactly 11 digits long and contain only numbers");
 
 
             RuleFor(x => x.NIN)
-            .Matches(@"^\[0-9]\d{11}$").WithMessage("NIN must be exactly 11 digits long.");
+                .Matches(@"^\d{11}$")
+                .WithMessage("NIN number must be exactly 11 digits long and contain only numbers");
 
             RuleFor(x => x.LandMark)
                 .MaximumLength(100).WithMessage("Landmark can be up to 100 characters long.");
@@ -76,8 +78,8 @@ namespace MyBankApp.Application.validator
             RuleFor(x => x.GenderId)
                 .GreaterThan(0).WithMessage("Gender ID must be a positive integer.");
 
-            RuleFor(x => x.Gender)
-                .IsInEnum().WithMessage("Invalid gender value.");
+            //RuleFor(x => x.Gender)
+            //    .IsInEnum().WithMessage("Invalid gender value.");
         }
     }
 }

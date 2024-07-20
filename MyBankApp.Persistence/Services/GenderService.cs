@@ -3,6 +3,7 @@ using MyBankApp.Application.Configuration;
 using MyBankApp.Application.Contracts.IServices;
 using MyBankApp.Application.Contracts.Persistence;
 using MyBankApp.Domain.Dto.RequestDto;
+using MyBankApp.Domain.Dto.ResponseDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace MyBankApp.Persistence.Services
         }
 
 
-        public async Task<IEnumerable<GenderRequestDto>> GetAllPostsAsync()
+        public async Task<IEnumerable<GenderResponseDto>> GetAllPostsAsync()
         {
             try
             {
@@ -32,7 +33,7 @@ namespace MyBankApp.Persistence.Services
                 {
                     var genders = await _unitOfWork.gender.GetAllAsync();
 
-                    return genders.Select(g => new GenderRequestDto
+                    return genders.Select(g => new GenderResponseDto
                     {
                         Id = g.Id,
                         Description = g.Description
@@ -41,13 +42,13 @@ namespace MyBankApp.Persistence.Services
                 else
                 {
                     _logger.LogError("Unit of work is null");
-                    return Enumerable.Empty<GenderRequestDto>();
+                    return Enumerable.Empty<GenderResponseDto>();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting all genders");
-                return Enumerable.Empty<GenderRequestDto>();
+                return Enumerable.Empty<GenderResponseDto>();
             }
         }
 

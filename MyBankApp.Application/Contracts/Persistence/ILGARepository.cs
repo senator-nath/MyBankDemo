@@ -10,6 +10,6 @@ namespace MyBankApp.Application.Contracts.Persistence
 {
     public interface ILGARepository : IAsyncRepository<LGA>
     {
-        Task<IEnumerable<LGAResponseDto>> GetByStateIdAsync(int stateId);
+
     }
 }

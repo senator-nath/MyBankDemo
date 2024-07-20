@@ -11,7 +11,8 @@ namespace MyBankApp.Application.Contracts.IServices
 {
     public interface ILGAService
     {
-        Task<IEnumerable<LGA>> GetAllLGAsAsync();
-        Task<IEnumerable<LGAResponseDto>> GetLGAsByStateIdAsync(int stateId);
+
+        Task<IEnumerable<LGAResponseDto>> GetLGAsByStateIdAsync(int id);
+
     }
 }

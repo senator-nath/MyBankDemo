@@ -23,7 +23,7 @@ namespace MyBankDemo.API.Controllers
             _userService = userService;
         }
         [HttpPost("register")]
-        public async Task<ActionResult<User>> RegisterUser([FromBody] User user)
+        public async Task<ActionResult<User>> RegisterUser([FromBody] UserRequestDto user)
         {
             try
             {

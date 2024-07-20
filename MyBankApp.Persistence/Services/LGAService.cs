@@ -24,30 +24,31 @@ namespace MyBankApp.Persistence.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<LGA>> GetAllLGAsAsync()
+        public async Task<IEnumerable<LGAResponseDto>> GetLGAsByStateIdAsync(int id)
         {
-            try
-            {
-                return await _unitOfWork.lgaRepository.GetAllAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex, "Error getting all LGAs");
-                throw;
-            }
-        }
+            List<LGAResponseDto> listResponse = new();
+            var result = await _unitOfWork.lgaRepository.GetAllByColumnAsync(x => x.StateId == id);
 
-        public async Task<IEnumerable<LGAResponseDto>> GetLGAsByStateIdAsync(int stateId)
-        {
-            try
+            if (result == null)
             {
-                return await _unitOfWork.lgaRepository.GetByStateIdAsync(stateId);
+                return listResponse;
             }
-            catch (Exception ex)
+
+            foreach (var item in result)
             {
-                _logger.LogInformation(ex, "Error getting LGAs by state ID");
-                throw;
+
+                var response = new LGAResponseDto
+                {
+
+                    Id = item.Id,
+                    Name = item.Name,
+                };
+
+                listResponse.Add(response);
+
             }
+
+            return listResponse;
         }
     }
 }

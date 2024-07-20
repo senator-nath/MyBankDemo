@@ -17,6 +17,6 @@ namespace MyBankApp.Application.Configuration
 
 
 
-        Task CompleteAsync();
+        Task<int> CompleteAsync();
     }
 }

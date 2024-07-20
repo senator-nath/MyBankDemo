@@ -19,16 +19,7 @@ namespace MyBankApp.Persistence.Repository
 
         }
 
-        public override async Task<IEnumerable<LGA>> GetAllAsync()
-        {
-            return await _dbContext.Set<LGA>().ToListAsync();
-        }
-        public async Task<IEnumerable<LGAResponseDto>> GetByStateIdAsync(int stateId)
-        {
-            return await _dbContext.Set<LGAResponseDto>()
-                .Where(lga => lga.StateId == stateId)
-                .ToListAsync();
-        }
+
 
 
 

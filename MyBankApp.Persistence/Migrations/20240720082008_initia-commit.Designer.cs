@@ -10,8 +10,8 @@ using MyBankApp.Persistence.Data;
 namespace MyBankApp.Persistence.Migrations
 {
     [DbContext(typeof(MyBankAppDbContext))]
-    [Migration("20240716202804_initial-migration")]
-    partial class initialmigration
+    [Migration("20240720082008_initia-commit")]
+    partial class initiacommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,7 +54,7 @@ namespace MyBankApp.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gender");
+                    b.ToTable("gender");
                 });
 
             modelBuilder.Entity("MyBankApp.Domain.Entities.LGA", b =>
@@ -105,8 +105,8 @@ namespace MyBankApp.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
+                    b.Property<string>("Age")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Bvn")
                         .HasColumnType("nvarchar(max)");
@@ -148,6 +148,9 @@ namespace MyBankApp.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NIN")

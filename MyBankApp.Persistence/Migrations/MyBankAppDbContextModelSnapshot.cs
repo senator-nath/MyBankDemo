@@ -52,7 +52,7 @@ namespace MyBankApp.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gender");
+                    b.ToTable("gender");
                 });
 
             modelBuilder.Entity("MyBankApp.Domain.Entities.LGA", b =>
@@ -103,8 +103,8 @@ namespace MyBankApp.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
+                    b.Property<string>("Age")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Bvn")
                         .HasColumnType("nvarchar(max)");
@@ -146,6 +146,9 @@ namespace MyBankApp.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NIN")

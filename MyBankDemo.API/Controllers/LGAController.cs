@@ -16,12 +16,7 @@ namespace MyBankDemo.API.Controllers
         {
             _lgaService = lgaService;
         }
-        [HttpGet("Get-ALl-LGAs")]
-        public async Task<IActionResult> GetLGAs()
-        {
-            var lgas = await _lgaService.GetAllLGAsAsync();
-            return Ok(lgas);
-        }
+
         [HttpGet("GetLGAsByStateId/{stateId:int}")]
         public async Task<IActionResult> GetLGAsByStateId(int stateId)
         {

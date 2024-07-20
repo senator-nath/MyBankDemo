@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyBankApp.Persistence.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class initiacommit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,7 +23,7 @@ namespace MyBankApp.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Gender",
+                name: "gender",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -32,7 +32,7 @@ namespace MyBankApp.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Gender", x => x.Id);
+                    table.PrimaryKey("PK_gender", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,13 +56,15 @@ namespace MyBankApp.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HashPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    accountType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailConfirmed = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Age = table.Column<int>(type: "int", nullable: false),
+                    Age = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LGAId = table.Column<int>(type: "int", nullable: false),
@@ -77,16 +79,15 @@ namespace MyBankApp.Persistence.Migrations
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    accountType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GenderId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Gender_GenderId",
+                        name: "FK_Users_gender_GenderId",
                         column: x => x.GenderId,
-                        principalTable: "Gender",
+                        principalTable: "gender",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -137,7 +138,7 @@ namespace MyBankApp.Persistence.Migrations
                 name: "State");
 
             migrationBuilder.DropTable(
-                name: "Gender");
+                name: "gender");
         }
     }
 }
