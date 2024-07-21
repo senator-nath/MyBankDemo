@@ -59,15 +59,7 @@ namespace MyBankApp.Persistence.Services
                 {
                     throw new ValidationException(validationResult.Errors);
                 }
-                var authClaims = new List<Claim>
-        {
-            new(ClaimTypes.Name, entity.UserName),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
 
-                var token = GetToken(authClaims);
-
-                var finalToken = new JwtSecurityTokenHandler().WriteToken(token);
                 var user_exist = await _unitOfWork.user.isUniqueUser(entity);
 
                 if (user_exist)
@@ -106,11 +98,24 @@ namespace MyBankApp.Persistence.Services
 
                 await _unitOfWork.user.CreateAsync(user);
                 await _unitOfWork.CompleteAsync();
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Email)
+                }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
 
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
                 var response = new UserResponseDto()
                 {
                     LastLogin = "Now",
-                    Token = finalToken,
+                    Token = tokenString,
                     DailyLimitBalance = "",
                     AccountNumber = user.AccountNo,
                     UserName = user.UserName,
@@ -128,9 +133,10 @@ namespace MyBankApp.Persistence.Services
                     Message = "",
                     IsSuccess = true,
                     ResponseDetails = response,
-                    Token = finalToken,
+                    Token = tokenString,
 
                 };
+
             }
             catch (ValidationException ex)
             {
@@ -152,8 +158,34 @@ namespace MyBankApp.Persistence.Services
             }
         }
 
+        //private string GenerateToken(User user)
+        //{
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var key = Encoding.ASCII.GetBytes(_appSettings.secret);
+        //    var tokenDescriptor = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(new Claim[]
+        //        {
+        //new Claim(ClaimTypes.Name, user.UserName),
+        //new Claim(ClaimTypes.Email, user.Email),
 
+        //        }),
+        //        Expires = DateTime.UtcNow.AddMinutes(30),
+        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        //    };
+        //    var token = tokenHandler.CreateToken(tokenDescriptor);
+        //    return tokenHandler.WriteToken(token);
+        //}
+        private static string Generate11DigitRandomNumber()
+        {
+            Random random = new Random();
+            string result = string.Empty;
 
+            result += random.Next(100000, 1000000).ToString("D6");
+            result += random.Next(10000, 100000).ToString("D5");
+
+            return result;
+        }
         private string CalculateAgeFromDateOfBirth(DateTime Dob)
         {
             var today = DateTime.Today;
@@ -165,55 +197,6 @@ namespace MyBankApp.Persistence.Services
             var Age = age.ToString();
             return Age;
         }
-
-        private static string Generate11DigitRandomNumber()
-        {
-            Random random = new Random();
-            string result = string.Empty;
-
-            // Generate the first 6 digits
-            result += random.Next(100000, 1000000).ToString("D6");
-
-            // Generate the remaining 5 digits
-            result += random.Next(10000, 100000).ToString("D5");
-
-            return result;
-        }
-        private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
-        {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256Signature));
-
-            return token;
-        }
-        //private string GenerateToken(User user)
-        //{
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var key = Encoding.ASCII.GetBytes("your-secret-key");
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = new ClaimsIdentity(new Claim[]
-        //        {
-        //    new Claim(ClaimTypes.Name, user.UserName),
-        //    new Claim(ClaimTypes.Email, user.Email),
-        //    new Claim(ClaimTypes.Role, user.accountType.ToString())
-        //        }),
-        //        Expires = DateTime.UtcNow.AddMinutes(30),
-        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        //    };
-        //    var token = tokenHandler.CreateToken(tokenDescriptor);
-        //    return tokenHandler.WriteToken(token);
-        //}
-
     }
 }
-
-
-
 

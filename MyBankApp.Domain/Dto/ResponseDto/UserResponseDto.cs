@@ -21,5 +21,9 @@ namespace MyBankApp.Domain.Dto.ResponseDto
         public string NIN { get; set; }
         public string Email { get; set; }
         public string Status { get; set; }
+        public string Message { get; set; }
+        public UserResponseDto ResponseDetails { get; set; }
+        public bool IsSuccess { get; set; }
+
     }
 }
